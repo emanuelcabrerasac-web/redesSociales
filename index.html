@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios de Gestión de Redes Sociales con IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: #0a0a0f;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #3b82f6;
+            border-radius: 50%;
+            animation: float 20s infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-100px) translateX(50px);
+            }
+            50% {
+                transform: translateY(-200px) translateX(-30px);
+            }
+            75% {
+                transform: translateY(-100px) translateX(-50px);
+            }
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.5)); }
+            50% { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.8)); }
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #e0e0e0;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #3b82f6;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 600px;
+            position: relative;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.4);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(168, 85, 247, 0.7) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            text-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: float-icon 3s ease-in-out infinite;
+        }
+
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        /* Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 5rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem;
+            color: #60a5fa;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #b0b0b0;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        .toc:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .toc h3 {
+            color: #3b82f6;
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin: 1rem 0;
+            padding-left: 2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .toc li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .toc li:hover {
+            padding-left: 2.5rem;
+        }
+
+        .toc li:hover::before {
+            color: #a855f7;
+            transform: translateX(5px);
+        }
+
+        .toc a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #3b82f6;
+        }
+
+        /* Content Image */
+        .content-image {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 3rem 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.5s;
+        }
+
+        .content-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 80px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.4s;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card h4 {
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+        }
+
+        /* Instructor Section */
+        .instructor-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: white;
+            padding: 5rem 2rem;
+            margin: 0 -2rem 5rem -2rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .instructor-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .instructor-image {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            transition: all 0.4s;
+        }
+
+        .instructor-image:hover {
+            transform: scale(1.05);
+            border-color: rgba(168, 85, 247, 0.8);
+            box-shadow: 0 20px 80px rgba(59, 130, 246, 0.6);
+        }
+
+        .instructor-info h2 {
+            color: white;
+            margin-top: 0;
+            background: none;
+            -webkit-text-fill-color: white;
+        }
+
+        .instructor-info h3 {
+            color: #60a5fa;
+            margin-top: 1rem;
+        }
+
+        .instructor-info h4 {
+            color: #a855f7;
+            margin-top: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .instructor-info p {
+            color: #e0e0e0;
+        }
+
+        /* List Styles */
+        ul {
+            margin: 1.5rem 0;
+            padding-left: 2.5rem;
+        }
+
+        li {
+            margin: 1rem 0;
+            color: #b0b0b0;
+            font-size: 1.1rem;
+        }
+
+        li::marker {
+            color: #3b82f6;
+        }
+
+        /* Classroom Button */
+        .classroom-section {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 4rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 4rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 3.5rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.4s;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.7);
+        }
+
+        /* Registration Form */
+        .registration-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            backdrop-filter: blur(20px);
+            padding: 5rem 2rem;
+            margin: 0 -2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .registration-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 4rem;
+            border-radius: 25px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .registration-form h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            background: none;
+            -webkit-text-fill-color: white;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #60a5fa;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1.2rem;
+            background: rgba(30, 30, 45, 0.6);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(30, 30, 45, 0.8);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: normal;
+            color: #b0b0b0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.3rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.7);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 15, 0.9);
+            color: #b0b0b0;
+            text-align: center;
+            padding: 3rem;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 4rem;
+            border-radius: 20px;
+            margin: 4rem 0;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .faq-item {
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: rgba(20, 20, 30, 0.5);
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateX(10px);
+        }
+
+        .faq-item h4 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Related Ideas */
+        .related-section {
+            margin-top: 5rem;
+            padding: 4rem 0;
+            border-top: 2px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .related-card {
+            background: rgba(30, 30, 45, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .related-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
+        }
+
+        .related-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: all 0.4s;
+        }
+
+        .related-card:hover .related-image {
+            transform: scale(1.1);
+        }
+
+        .related-content {
+            padding: 2rem;
+        }
+
+        .related-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .related-title {
+            font-weight: 600;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .instructor-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .instructor-image {
+                margin: 0 auto;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+    
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">🤖 Social Media IA</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#aprenderás">Contenido</a></li>
+                <li><a href="#instructor">Instructor</a></li>
+                <li><a href="#classroom">Classroom</a></li>
+                <li><a href="#inscripcion">Inscribirse</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-image-container">
+            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1920&q=80" alt="Gestión de Redes Sociales con IA" class="hero-image">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <div class="hero-icon">🚀</div>
+                    <h1>Gestión de Redes Sociales con IA</h1>
+                    <p class="hero-subtitle">Domina la automatización y optimización de redes sociales usando Inteligencia Artificial</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="toc scroll-reveal">
+            <h3>📋 Tabla de contenidos</h3>
+            <ul>
+                <li><a href="#intro">🤖 ¿Qué es la inteligencia artificial (IA)?</a></li>
+                <li><a href="#aplicacion">🧩 IA aplicada a la gestión de redes sociales</a></li>
+                <li><a href="#aprenderás">📚 Descubre lo que aprenderás</a></li>
+                <li><a href="#ideas-negocio">🚀 Ideas de negocio usando IA</a></li>
+                <li><a href="#instructor">👨‍🏫 Tu Instructor</a></li>
+                <li><a href="#contenido">📖 Contenido del Curso</a></li>
+                <li><a href="#classroom">🎓 Acceso a Classroom</a></li>
+                <li><a href="#ventajas">⚡ Ventajas de usar IA</a></li>
+                <li><a href="#faq">🤔 Preguntas frecuentes</a></li>
+                <li><a href="#inscripcion">✍️ Formulario de Inscripción</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <section id="intro" class="scroll-reveal">
+            <h2>🤖 ¿Qué es la inteligencia artificial (IA)?</h2>
+            <p>La IA es una rama de la informática que busca desarrollar sistemas capaces de realizar tareas que normalmente requieren inteligencia humana, como el reconocimiento de patrones, aprendizaje, razonamiento y adaptación. Existen diversos enfoques y técnicas en el campo de la IA, como el aprendizaje automático (machine learning), las redes neuronales artificiales y el procesamiento del lenguaje natural.</p>
+        </section>
+
+        <!-- AI Application -->
+        <section id="aplicacion" class="scroll-reveal">
+            <h2>🧩 IA aplicada a la gestión de redes sociales</h2>
+            
+            <h3>🔸 Análisis de datos</h3>
+            <p>La IA puede analizar grandes volúmenes de datos generados por las redes sociales, como publicaciones, interacciones y comportamientos de los usuarios. Estos análisis permiten a las empresas identificar tendencias, entender a su audiencia y adaptar sus estrategias de marketing para obtener mejores resultados.</p>
+
+            <h3>🔸 Automatización de procesos</h3>
+            <p>La IA también puede ayudar a automatizar diversas tareas relacionadas con la gestión de redes sociales, como programación de publicaciones, moderación de comentarios y análisis de métricas. Esto permite a los profesionales del marketing enfocarse en actividades más estratégicas y creativas.</p>
+
+            <h3>🔸 Herramientas de IA en redes sociales</h3>
+            <p>Existen varias herramientas que aplican IA para facilitar la gestión de redes sociales, como Hootsuite, Sprout Social y Buffer. Estas plataformas ofrecen funcionalidades como análisis de sentimiento, sugerencias de contenido, y segmentación de audiencia, entre otras.</p>
+
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80" alt="Análisis de datos en redes sociales" class="content-image">
+        </section>
+
+        <!-- What You'll Learn -->
+        <section id="aprenderás" class="scroll-reveal">
+            <h2>📚 Descubre lo que aprenderás</h2>
+            <p>En este curso completo, dominarás el uso de la inteligencia artificial para revolucionar la gestión de redes sociales. Aprenderás desde los fundamentos hasta técnicas avanzadas de automatización, análisis predictivo y creación de contenido con IA.</p>
+
+            <h3>🎯 Fundamentos de Social Media Marketing</h3>
+            <p>Comprenderás los principios básicos del marketing en redes sociales, análisis de audiencias, estrategias de contenido y métricas clave (KPIs). Aprenderás a crear estrategias efectivas que maximicen el engagement y la conversión.</p>
+
+            <h3>🤖 Herramientas de IA para Redes Sociales</h3>
+            <p>Dominarás plataformas como ChatGPT para creación de contenido, DALL-E y Midjourney para generación de imágenes, y herramientas de automatización como Buffer, Hootsuite y Zapier con integración de IA.</p>
+
+            <h3>📊 Análisis de Datos con IA</h3>
+            <p>Aprenderás a utilizar herramientas de IA para analizar grandes volúmenes de datos, identificar patrones de comportamiento, realizar análisis de sentimiento y predecir tendencias. Usarás Python, Google Analytics y herramientas de visualización de datos.</p>
+
+            <h3>⚡ Automatización de Campañas</h3>
+            <p>Implementarás sistemas automatizados para programar publicaciones, responder consultas mediante chatbots, gestionar anuncios y optimizar el timing de tus posts usando machine learning.</p>
+        </section>
+
+        <!-- Business Ideas -->
+        <section id="ideas-negocio" class="scroll-reveal">
+            <h2>🚀 Ideas de negocio usando IA para la gestión de redes sociales</h2>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4><span class="feature-icon">💰</span> Plataformas de gestión</h4>
+                    <p>Desarrollar una plataforma propia que utilice IA para gestionar y analizar redes sociales. Esta plataforma puede ofrecer programación de publicaciones, análisis de sentimiento, recomendaciones de contenido y mucho más.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🎯</span> Agencias especializadas</h4>
+                    <p>Crear una agencia de marketing digital enfocada en el uso de IA para la gestión de redes sociales. Ofrecer servicios personalizados y eficientes, utilizando la IA para optimizar las estrategias de clientes.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">💡</span> Consultoría estratégica</h4>
+                    <p>Ofrecer servicios de consultoría en estrategias de redes sociales apoyadas en IA. Trabajar con empresas y emprendedores para diseñar e implementar estrategias de social media eficientes y efectivas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🤖</span> Chatbots inteligentes</h4>
+                    <p>Desarrollar chatbots para redes sociales utilizando IA. Los chatbots pueden ayudar a las empresas a mejorar su atención al cliente, gestionar consultas y quejas, y generar leads de forma automática.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">✨</span> Contenido personalizado</h4>
+                    <p>Otra idea de negocio basada en IA es la creación de contenido personalizado para redes sociales. La IA puede analizar datos de audiencia para generar contenido relevante y atractivo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section id="instructor" class="instructor-section scroll-reveal">
+            <div class="instructor-content">
+                <img src="Avatar.jpeg" alt="Emanuel Cabrera Tananta" class="instructor-image">
+                <div class="instructor-info">
+                    <h2>👨‍🏫 Tu Instructor</h2>
+                    <h3>Emanuel Cabrera Tananta</h3>
+                    <h4>Especialista en Marketing Digital & IA</h4>
+                    <p>Con amplia experiencia en la implementación de soluciones de inteligencia artificial para redes sociales, te guiaré paso a paso para que domines las herramientas y estrategias más efectivas del mercado.</p>
+                    <p>Mi enfoque es 100% práctico: aprenderás trabajando en casos reales, creando campañas automatizadas y desarrollando proyectos que podrás incluir en tu portafolio profesional. Te enseñaré no solo las herramientas técnicas, sino también las metodologías y mejores prácticas que utilizan las empresas líderes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Content -->
+        <section id="contenido" class="scroll-reveal">
+            <h2>📖 Contenido del Curso</h2>
+            <p>Un recorrido exhaustivo desde los fundamentos hasta técnicas avanzadas de gestión de redes sociales con IA.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4><span class="feature-icon">📱</span> Módulo 1: Fundamentos</h4>
+                    <p>• Introducción a Social Media Marketing<br>
+                    • Plataformas principales<br>
+                    • KPIs y métricas esenciales<br>
+                    • Estrategias de contenido<br>
+                    • Community Management</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🤖</span> Módulo 2: IA para Contenido</h4>
+                    <p>• ChatGPT para copywriting<br>
+                    • Generación de imágenes con DALL-E<br>
+                    • Midjourney y Stable Diffusion<br>
+                    • Herramientas de edición con IA<br>
+                    • Creación de videos automatizados</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">📊</span> Módulo 3: Análisis con IA</h4>
+                    <p>• Python para análisis de datos<br>
+                    • Análisis de sentimiento<br>
+                    • Identificación de tendencias<br>
+                    • Segmentación de audiencias<br>
+                    • Dashboards y reportes automatizados</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">⚙️</span> Módulo 4: Automatización</h4>
+                    <p>• Programación de publicaciones<br>
+                    • Zapier y Make.com<br>
+                    • Workflows automatizados<br>
+                    • Respuestas automáticas<br>
+                    • Optimización de horarios</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">💬</span> Módulo 5: Chatbots</h4>
+                    <p>• Diseño conversacional<br>
+                    • Desarrollo de chatbots<br>
+                    • Integración con Messenger y WhatsApp<br>
+                    • NLP y procesamiento de lenguaje<br>
+                    • Mantenimiento y optimización</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">📈</span> Módulo 6: Campañas Publicitarias</h4>
+                    <p>• Facebook Ads con IA<br>
+                    • Google Ads automatizados<br>
+                    • Optimización de presupuesto<br>
+                    • A/B Testing automatizado<br>
+                    • ROI y métricas de conversión</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">🎯</span> Módulo 7: Estrategias Avanzadas</h4>
+                    <p>• Influencer Marketing con IA<br>
+                    • Predicción de tendencias<br>
+                    • Personalización a escala<br>
+                    • Crisis management<br>
+                    • Estrategias multicanal</p>
+                </div>
+
+                <div class="feature-card">
+                    <h4><span class="feature-icon">💼</span> Módulo 8: Proyecto Final</h4>
+                    <p>• Desarrollo de estrategia completa<br>
+                    • Implementación de herramientas<br>
+                    • Creación de portafolio<br>
+                    • Presentación de proyecto<br>
+                    • Certificación profesional</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Classroom Access -->
+        <section id="classroom" class="classroom-section scroll-reveal">
+            <h2>🎓 Acceso a Google Classroom</h2>
+            <p>Únete a nuestra aula virtual donde encontrarás todos los materiales del curso, plantillas descargables, casos prácticos, ejercicios y una comunidad activa de estudiantes y profesionales del marketing digital.</p>
+            <a href="https://classroom.google.com/c/ODMxNTUzMDQzMTYz?cjc=kgqt3dx3" target="_blank" class="btn">Ir a Classroom</a>
+        </section>
+
+        <!-- Advantages -->
+        <section id="ventajas" class="scroll-reveal">
+            <h2>⚡ Ventajas de usar IA en la gestión de redes sociales</h2>
+            <ul>
+                <li><strong>Mayor eficiencia y productividad</strong> al automatizar tareas repetitivas y enfocarte en estrategia.</li>
+                <li><strong>Análisis de datos más precisos</strong> y en tiempo real para tomar decisiones informadas.</li>
+                <li><strong>Adaptación y personalización</strong> de las estrategias de marketing según el comportamiento de la audiencia.</li>
+                <li><strong>Mejora de la atención al cliente</strong> y la comunicación con la audiencia mediante chatbots inteligentes.</li>
+                <li><strong>Optimización de la inversión</strong> en marketing digital con predicciones y recomendaciones basadas en datos.</li>
+                <li><strong>Generación de contenido a escala</strong> manteniendo calidad y relevancia.</li>
+                <li><strong>Identificación de oportunidades</strong> y tendencias antes que la competencia.</li>
+                <li><strong>Reducción de costos operativos</strong> mediante automatización inteligente.</li>
+            </ul>
+
+            <h3>📈 Desafíos y limitaciones</h3>
+            <p>A pesar de sus ventajas, también existen desafíos al usar IA en la gestión de redes sociales:</p>
+            <ul>
+                <li>Dependencia de la calidad y cantidad de datos para el aprendizaje automático.</li>
+                <li>Dificultades en la interpretación de contextos y emociones humanas complejas.</li>
+                <li>Riesgos de privacidad y seguridad de la información de usuarios.</li>
+                <li>Necesidad de actualización y adaptación constante a las tendencias y cambios en las redes sociales.</li>
+                <li>Importancia de mantener el toque humano y autenticidad en la comunicación.</li>
+            </ul>
+
+            <h3>✌🏽 Conclusión</h3>
+            <p>La inteligencia artificial ha abierto un amplio abanico de oportunidades para el mundo de las redes sociales y el marketing digital. Las estrategias presentadas en este curso aprovechan el potencial de la IA para mejorar la gestión de redes sociales, ofreciendo soluciones eficientes, personalizadas y adaptadas a las necesidades de cada cliente. Sin embargo, es importante considerar los desafíos y limitaciones que plantea esta tecnología y estar siempre atentos a las nuevas tendencias y avances en el campo de la IA.</p>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="faq-section scroll-reveal">
+            <h2>🤔 Preguntas frecuentes</h2>
+            
+            <div class="faq-item">
+                <h4>📌 ¿Por qué es importante utilizar IA en la gestión de redes sociales?</h4>
+                <p>La IA puede aumentar la eficiencia y efectividad de las estrategias de marketing en redes sociales al permitir análisis de datos precisos, automatización de procesos y adaptación a las necesidades y preferencias de la audiencia.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>📌 ¿Qué tipos de herramientas de IA existen para la gestión de redes sociales?</h4>
+                <p>Existen herramientas como Hootsuite, Sprout Social y Buffer que utilizan IA para ofrecer funcionalidades como análisis de sentimiento, sugerencias de contenido, segmentación de audiencia y programación de publicaciones, entre otras.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>📌 ¿Cuál es la ventaja principal de utilizar IA en la atención al cliente a través de redes sociales?</h4>
+                <p>La IA, mediante chatbots, permite mejorar la atención al cliente en redes sociales al brindar respuestas rápidas y precisas, gestionar consultas y quejas de manera eficiente, y generar leads de forma automática.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>📌 ¿Cuáles son los desafíos de utilizar IA en la gestión de redes sociales?</h4>
+                <p>Los desafíos incluyen la dependencia de la calidad y cantidad de datos para el aprendizaje automático, las dificultades en la interpretación de contextos y emociones humanas, los riesgos de privacidad y seguridad de la información, y la necesidad de actualización constante ante cambios y tendencias en redes sociales.</p>
+            </div>
+
+            <div class="faq-item">
+                <h4>📌 ¿Cómo puedo empezar a utilizar IA en mi estrategia de redes sociales?</h4>
+                <p>Para empezar a utilizar IA en tu estrategia de redes sociales, puedes investigar y probar diferentes herramientas y plataformas que integren IA, buscar asesoramiento de expertos en marketing digital y tecnología, y mantenerte actualizado sobre las últimas tendencias y desarrollos en el campo de la IA.</p>
+            </div>
+        </section>
+
+        <!-- Registration Form -->
+        <section id="inscripcion" class="registration-section scroll-reveal">
+            <div class="registration-form">
+                <h2>Datos Personales</h2>
+                <p style="text-align: center; color: #b0b0b0; margin-bottom: 2rem;">Reserva tu cupo y comienza a dominar la gestión de redes sociales con IA</p>
+                <form onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez González">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico *</label>
+                        <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp *</label>
+                        <input type="tel" id="telefono" name="telefono" required placeholder="+51 999 999 999">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="empresa">Empresa / Emprendimiento (opcional)</label>
+                        <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa o marca">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experiencia">Nivel de Experiencia en Redes Sociales *</label>
+                        <select id="experiencia" name="experiencia" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="principiante">Principiante - Sin experiencia previa</option>
+                            <option value="basico">Básico - Manejo personal de redes</option>
+                            <option value="intermedio">Intermedio - Gestiono redes de negocio</option>
+                            <option value="avanzado">Avanzado - Trabajo en marketing digital</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Herramientas que conoces (opcional)</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="chatgpt" name="herramientas" value="chatgpt">
+                            <label for="chatgpt">ChatGPT u otras IAs generativas</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="analisis" name="herramientas" value="analisis">
+                            <label for="analisis">Herramientas de análisis (Analytics, etc.)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="programacion" name="herramientas" value="programacion">
+                            <label for="programacion">Programación de publicaciones</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="publicidad" name="herramientas" value="publicidad">
+                            <label for="publicidad">Publicidad en redes (Ads)</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="objetivo">¿Qué esperas lograr con este curso?</label>
+                        <textarea id="objetivo" name="objetivo" rows="4" placeholder="Cuéntanos tus objetivos y expectativas..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar Inscripción</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Related Ideas -->
+        <section class="related-section scroll-reveal">
+            <h2>💎 Más ideas</h2>
+            <div class="related-grid">
+                <a href="#" class="related-card">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600" alt="Marketing de Afiliados" class="related-image">
+                    <div class="related-content">
+                        <div class="related-icon">💎</div>
+                        <div class="related-title">Sitio web de afiliados</div>
+                    </div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600" alt="Chatbots" class="related-image">
+                    <div class="related-content">
+                        <div class="related-icon">🤖</div>
+                        <div class="related-title">Desarrolla Chatbots para soporte al cliente</div>
+                    </div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <img src="https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=600" alt="Contenido SEO" class="related-image">
+                    <div class="related-content">
+                        <div class="related-icon">📊</div>
+                        <div class="related-title">Ofrecer servicios de SEO</div>
+                    </div>
+                </a>
+
+                <a href="#" class="related-card">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600" alt="Gestión de Reputación" class="related-image">
+                    <div class="related-content">
+                        <div class="related-icon">🏆</div>
+                        <div class="related-title">Gestión de reputación de marca</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Curso de Gestión de Redes Sociales con IA - Emanuel Cabrera Tananta</p>
+        <p>Domina la automatización y optimización de redes sociales usando Inteligencia Artificial</p>
+    </footer>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const data = {
+                nombre: formData.get('nombre'),
+                email: formData.get('email'),
+                telefono: formData.get('telefono'),
+                empresa: formData.get('empresa'),
+                experiencia: formData.get('experiencia'),
+                herramientas: formData.getAll('herramientas'),
+                objetivo: formData.get('objetivo')
+            };
+            
+            console.log('Datos del formulario:', data);
+            alert('¡Gracias por tu inscripción! Pronto recibirás más información en tu correo electrónico.');
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
